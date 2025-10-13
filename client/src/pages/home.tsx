@@ -292,7 +292,7 @@ export default function Home() {
                 {[
                   { label: "Members", value: "1,500+" },
                   { label: "Channels", value: "50+" },
-                  { label: "Active", value: "24/7" },
+                  { label: "Active", value: "N/A" },
                   { label: "Security", value: "MAX" },
                 ].map((item) => (
                   <div key={item.label} className="text-center" data-testid={`discord-stat-${item.label.toLowerCase()}`}>
