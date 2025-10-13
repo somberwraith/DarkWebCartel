@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Shield, Clock, User, Calendar, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -17,10 +17,43 @@ export default function Appeal() {
   });
   const [captchaToken, setCaptchaToken] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const captchaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Load hCaptcha script
+    const script = document.createElement('script');
+    script.src = 'https://js.hcaptcha.com/1/api.js';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    // Set up callback for when captcha is completed
+    (window as any).onCaptchaSuccess = (token: string) => {
+      setCaptchaToken(token);
+    };
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const validateDiscordId = (id: string): boolean => {
+    // Discord IDs are 17-19 characters long and consist only of digits
+    return /^\d{17,19}$/.test(id);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!validateDiscordId(formData.userId)) {
+      toast({
+        title: "Invalid Discord ID",
+        description: "Please enter a valid Discord user ID (17-19 digits)",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!captchaToken) {
       toast({
         title: "Verification Required",
@@ -109,17 +142,22 @@ export default function Appeal() {
                 <div className="space-y-2">
                   <Label htmlFor="userId" className="font-mono text-sm flex items-center gap-2">
                     <User className="w-4 h-4 text-primary" />
-                    USER ID
+                    DISCORD USER ID
                   </Label>
                   <Input
                     id="userId"
                     type="text"
                     value={formData.userId}
                     onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
-                    placeholder="Enter your Discord/Telegram user ID"
+                    placeholder="Enter your Discord user ID (17-19 digits)"
                     required
+                    pattern="\d{17,19}"
+                    maxLength={19}
                     className="font-mono"
                   />
+                  <p className="text-xs text-muted-foreground font-mono">
+                    Discord user IDs are 17-19 digits long
+                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -158,8 +196,9 @@ export default function Appeal() {
                     VERIFICATION
                   </Label>
                   <div 
+                    ref={captchaRef}
                     className="h-captcha" 
-                    data-sitekey="YOUR_HCAPTCHA_SITE_KEY"
+                    data-sitekey="10000000-ffff-ffff-ffff-000000000001"
                     data-callback="onCaptchaSuccess"
                   ></div>
                 </div>
@@ -184,21 +223,6 @@ export default function Appeal() {
           </Card>
         </div>
       </section>
-
-      <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.onCaptchaSuccess = function(token) {
-              window.dispatchEvent(new CustomEvent('hcaptcha-success', { detail: token }));
-            };
-            
-            window.addEventListener('hcaptcha-success', function(e) {
-              // Token will be handled by React component
-            });
-          `,
-        }}
-      />
     </div>
   );
 }

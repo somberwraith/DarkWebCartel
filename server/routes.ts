@@ -12,7 +12,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Appeal submission endpoint
   app.post("/api/appeals", async (req, res) => {
     try {
-      const { userId, denialDate, appealReason, whenToJoin, captchaToken } = req.body;
+      const { userId, denialDate, appealReason, captchaToken } = req.body;
+
+      // Validate Discord user ID (17-19 digits)
+      if (!/^\d{17,19}$/.test(userId)) {
+        return res.status(400).json({ error: "Invalid Discord user ID format" });
+      }
 
       // Verify hCaptcha token
       const hcaptchaSecret = process.env.HCAPTCHA_SECRET_KEY;
@@ -37,7 +42,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId,
         denialDate,
         appealReason,
-        whenToJoin,
         submittedAt: new Date().toISOString(),
       };
 
