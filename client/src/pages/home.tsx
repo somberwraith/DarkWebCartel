@@ -204,7 +204,7 @@ export default function Home() {
               
               <div className="border-l-2 border-primary pl-4">
                 <p className="text-sm text-foreground font-mono">
-                  "In the digital underground, we don't ask for permission. We create our own rules."
+                  "All hope abandon, ye who enter here."
                 </p>
               </div>
             </div>
