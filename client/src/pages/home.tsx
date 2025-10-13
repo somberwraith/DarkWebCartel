@@ -39,7 +39,7 @@ export default function Home() {
   }, []);
 
   const stats = [
-    { label: "ACTIVE NODES", value: "1,500+", icon: Users },
+    { label: "MEMBERS", value: "1,500+", icon: Users },
     { label: "UPTIME", value: "99.9%", icon: Zap },
     { label: "SECURITY LVL", value: "MAX", icon: Shield },
   ];
@@ -134,8 +134,7 @@ export default function Home() {
           {/* Main CTA */}
           <div className="text-center space-y-6 mb-16">
             <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto tracking-wide" data-testid="text-description">
-              A DECENTRALIZED COLLECTIVE OPERATING BEYOND THE DIGITAL FRONTIER. 
-              JOIN OUR ENCRYPTED NETWORK AND BECOME PART OF THE UNDERGROUND.
+              WE DO STUFF(?)
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
@@ -199,10 +198,7 @@ export default function Home() {
                   &gt; ABOUT_THE_NETWORK
                 </h2>
                 <p className="text-muted-foreground leading-relaxed" data-testid="text-about">
-                  The CARTEL is a collective of digital operators, hackers, and technologists 
-                  working together in the shadows of the internet. We share knowledge, tools, 
-                  and resources to push the boundaries of what's possible. Our Discord server 
-                  is the hub for all operations - a place where anonymity meets collaboration.
+                  All hope abandon, ye who enter here.
                 </p>
               </div>
               
@@ -265,8 +261,7 @@ export default function Home() {
               </h2>
               
               <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed" data-testid="text-join-description">
-                Ready to enter the underground? Our Discord server is where the real action happens. 
-                Connect with fellow operators, access exclusive resources, and participate in collaborative operations.
+                If you're an unknown/random, you will not be permitted into our community.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
