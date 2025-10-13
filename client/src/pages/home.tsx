@@ -198,7 +198,7 @@ export default function Home() {
                   &gt; ABOUT_THE_NETWORK
                 </h2>
                 <p className="text-muted-foreground leading-relaxed" data-testid="text-about">
-                  Abandon all hope, ye who enter here.
+                  Friends :3
                 </p>
               </div>
               
