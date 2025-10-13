@@ -25,14 +25,17 @@ export default function Appeal() {
       setCaptchaToken(token);
     };
 
+    // Get sitekey from environment or use empty string
+    const sitekey = import.meta.env.VITE_HCAPTCHA_SITEKEY || '';
+
     // Check if hCaptcha is already loaded
-    if ((window as any).hcaptcha && captchaRef.current) {
+    if ((window as any).hcaptcha && captchaRef.current && sitekey) {
       // Render hCaptcha widget
       (window as any).hcaptcha.render(captchaRef.current, {
-        sitekey: '10000000-ffff-ffff-ffff-000000000001',
+        sitekey: sitekey,
         callback: 'onCaptchaSuccess',
       });
-    } else {
+    } else if (sitekey) {
       // Load hCaptcha script if not already loaded
       const script = document.createElement('script');
       script.src = 'https://js.hcaptcha.com/1/api.js?onload=onHcaptchaLoad&render=explicit';
@@ -43,7 +46,7 @@ export default function Appeal() {
       (window as any).onHcaptchaLoad = () => {
         if (captchaRef.current && (window as any).hcaptcha) {
           (window as any).hcaptcha.render(captchaRef.current, {
-            sitekey: '10000000-ffff-ffff-ffff-000000000001',
+            sitekey: sitekey,
             callback: 'onCaptchaSuccess',
           });
         }
