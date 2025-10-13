@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Skull, Shield, Users, Zap, ExternalLink } from "lucide-react";
+import { useEffect, useState, useMemo } from "react";
+import { Terminal, Skull, Shield, Users, Zap, ExternalLink } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faTelegram } from "@fortawesome/free-brands-svg-icons";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,17 @@ export default function Home() {
       setShowCursor(prev => !prev);
     }, 500);
     return () => clearInterval(interval);
+  }, []);
+
+  // Memoize background glyphs to prevent re-randomization on every render
+  const backgroundGlyphs = useMemo(() => {
+    return [...Array(20)].map((_, i) => ({
+      id: i,
+      text: Math.random().toString(36).substring(2, 15),
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      animationDuration: `${Math.random() * 3 + 2}s`,
+    }));
   }, []);
 
   const stats = [
@@ -66,17 +77,17 @@ export default function Home() {
       <section className="relative min-h-screen flex items-center justify-center px-4 pt-20">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 opacity-10">
-            {[...Array(20)].map((_, i) => (
+            {backgroundGlyphs.map((glyph) => (
               <div
-                key={i}
+                key={glyph.id}
                 className="absolute text-primary font-mono text-xs"
                 style={{
-                  top: `${Math.random() * 100}%`,
-                  left: `${Math.random() * 100}%`,
-                  animation: `fadeIn ${Math.random() * 3 + 2}s ease-in-out infinite`,
+                  top: glyph.top,
+                  left: glyph.left,
+                  animation: `fadeIn ${glyph.animationDuration} ease-in-out infinite`,
                 }}
               >
-                {Math.random().toString(36).substring(2, 15)}
+                {glyph.text}
               </div>
             ))}
           </div>
