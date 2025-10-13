@@ -40,7 +40,7 @@ export default function Home() {
 
   const stats = [
     { label: "MEMBERS", value: "1,500+", icon: Users },
-    { label: "UPTIME", value: "99.9%", icon: Zap },
+    { label: "ACTIVE", value: "N/A", icon: Zap },
     { label: "SECURITY LVL", value: "MAX", icon: Shield },
   ];
 
