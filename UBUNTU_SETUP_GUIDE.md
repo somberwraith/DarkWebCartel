@@ -34,17 +34,24 @@
 
 4. **Run the Development Server**
    ```bash
-   npm run dev
+   # Port 80 requires root privileges on Ubuntu
+   sudo npm run dev
    ```
 
 5. **Access the Application**
-   - Open your browser and go to: `http://localhost:5000`
+   - Open your browser and go to: `http://localhost`
    - The app should be running with the terminal theme and all features!
+   
+   **Note**: Port 80 requires sudo/root privileges on Ubuntu. If you prefer not to use sudo, you can set a custom port:
+   ```bash
+   PORT=3000 npm run dev
+   ```
+   Then access at `http://localhost:3000`
 
 ## Troubleshooting
 
-- **Port already in use**: If port 5000 is taken, you can change it in `server/index.ts`
-- **Permission errors**: Run with `sudo` if needed (though usually not required)
+- **Permission denied on port 80**: Port 80 requires root privileges. Run with `sudo npm run dev`
+- **Port already in use**: Change the port with `PORT=3000 npm run dev`
 - **Module not found**: Make sure you ran `npm install` successfully
 
 ## Production Build
@@ -63,4 +70,5 @@ npm start
 
 - This is a single-page application with an Express backend
 - All data is stored in memory (no database setup needed)
-- The app runs on port 5000 by default
+- The app runs on port 80 by default (requires sudo on Ubuntu)
+- You can use a different port by setting the PORT environment variable: `PORT=3000 npm run dev`
