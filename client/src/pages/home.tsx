@@ -49,7 +49,7 @@ export default function Home() {
     { id: 2, title: "Prohibition of Screenshots & Recordings", text: "Screenshots, screen recordings, audio recordings, GIF captures, or any other form of content reproduction are strictly prohibited." },
     { id: 3, title: "Privacy of Members", text: "You may not disclose, reference, or share any member's username, display name, profile photo, banner, bio, or account connections outside the server." },
     { id: 4, title: "Media Sharing Restrictions", text: "Do not share any media (images, videos, audio files, documents, etc.) posted by others in this server without their explicit written permission." },
-    { id: 5, title: "Screenshare & Voice Confidentiality", text: "What happens in CARTEL stays in CARTEL — Any information shared via voice channels or screenshare must remain private. Recording or distributing content from these sessions is not allowed." },
+    { id: 5, title: "Screenshare & Voice Confidentiality", text: "Any information shared via voice channels or screenshare must remain private. Recording or distributing content from these sessions is not allowed." },
   ];
 
   return (
