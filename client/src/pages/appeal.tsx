@@ -20,21 +20,43 @@ export default function Appeal() {
   const captchaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Load hCaptcha script
-    const script = document.createElement('script');
-    script.src = 'https://js.hcaptcha.com/1/api.js';
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-
-    // Set up callback for when captcha is completed
+    // Set up global callback before loading script
     (window as any).onCaptchaSuccess = (token: string) => {
       setCaptchaToken(token);
     };
 
-    return () => {
-      document.body.removeChild(script);
-    };
+    // Check if hCaptcha is already loaded
+    if ((window as any).hcaptcha && captchaRef.current) {
+      // Render hCaptcha widget
+      (window as any).hcaptcha.render(captchaRef.current, {
+        sitekey: '10000000-ffff-ffff-ffff-000000000001',
+        callback: 'onCaptchaSuccess',
+      });
+    } else {
+      // Load hCaptcha script if not already loaded
+      const script = document.createElement('script');
+      script.src = 'https://js.hcaptcha.com/1/api.js?onload=onHcaptchaLoad&render=explicit';
+      script.async = true;
+      script.defer = true;
+
+      // Set up onload callback
+      (window as any).onHcaptchaLoad = () => {
+        if (captchaRef.current && (window as any).hcaptcha) {
+          (window as any).hcaptcha.render(captchaRef.current, {
+            sitekey: '10000000-ffff-ffff-ffff-000000000001',
+            callback: 'onCaptchaSuccess',
+          });
+        }
+      };
+
+      document.body.appendChild(script);
+
+      return () => {
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
+      };
+    }
   }, []);
 
   const validateDiscordId = (id: string): boolean => {
@@ -195,12 +217,7 @@ export default function Appeal() {
                     <Shield className="w-4 h-4 text-primary" />
                     VERIFICATION
                   </Label>
-                  <div 
-                    ref={captchaRef}
-                    className="h-captcha" 
-                    data-sitekey="10000000-ffff-ffff-ffff-000000000001"
-                    data-callback="onCaptchaSuccess"
-                  ></div>
+                  <div ref={captchaRef}></div>
                 </div>
 
                 <Button
