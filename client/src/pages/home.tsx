@@ -54,6 +54,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground scanline crt-screen">
+      {/* Hidden YouTube background music */}
+      <iframe
+        className="hidden"
+        src="https://www.youtube.com/embed/brlEIxdCIKE?autoplay=1&loop=1&playlist=brlEIxdCIKE&controls=0&showinfo=0&modestbranding=1"
+        allow="autoplay"
+        title="Background Music"
+      />
+      
       {/* Boot sequence header */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
