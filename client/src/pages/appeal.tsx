@@ -14,7 +14,6 @@ export default function Appeal() {
     userId: "",
     denialDate: "",
     appealReason: "",
-    whenToJoin: "",
   });
   const [captchaToken, setCaptchaToken] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -52,7 +51,6 @@ export default function Appeal() {
           userId: "",
           denialDate: "",
           appealReason: "",
-          whenToJoin: "",
         });
         setCaptchaToken("");
         // Reset hCaptcha
@@ -120,7 +118,7 @@ export default function Appeal() {
                     onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
                     placeholder="Enter your Discord/Telegram user ID"
                     required
-                    className="font-mono border-primary/30 focus:border-primary"
+                    className="font-mono"
                   />
                 </div>
 
@@ -135,22 +133,7 @@ export default function Appeal() {
                     value={formData.denialDate}
                     onChange={(e) => setFormData({ ...formData, denialDate: e.target.value })}
                     required
-                    className="font-mono border-primary/30 focus:border-primary"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="whenToJoin" className="font-mono text-sm flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-primary" />
-                    WHEN SHOULD YOU BE ALLOWED TO JOIN
-                  </Label>
-                  <Input
-                    id="whenToJoin"
-                    type="date"
-                    value={formData.whenToJoin}
-                    onChange={(e) => setFormData({ ...formData, whenToJoin: e.target.value })}
-                    required
-                    className="font-mono border-primary/30 focus:border-primary"
+                    className="font-mono"
                   />
                 </div>
 
@@ -165,7 +148,7 @@ export default function Appeal() {
                     placeholder="Explain why your denial should be reconsidered..."
                     required
                     rows={6}
-                    className="font-mono border-primary/30 focus:border-primary resize-none"
+                    className="font-mono resize-none"
                   />
                 </div>
 
