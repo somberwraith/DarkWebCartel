@@ -39,17 +39,17 @@ export default function Home() {
   }, []);
 
   const stats = [
-    { label: "ACTIVE NODES", value: "1,247", icon: Users },
+    { label: "ACTIVE NODES", value: "1,500+", icon: Users },
     { label: "UPTIME", value: "99.9%", icon: Zap },
     { label: "SECURITY LVL", value: "MAX", icon: Shield },
   ];
 
   const rules = [
-    { id: 1, text: "Maintain operational security at all times" },
-    { id: 2, text: "No external surveillance - encrypted channels only" },
-    { id: 3, text: "Respect the collective - we operate as one" },
-    { id: 4, text: "Share knowledge - elevate the network" },
-    { id: 5, text: "What happens in CARTEL stays in CARTEL" },
+    { id: 1, title: "Maintain operational security at all times", text: "Confidentiality of Conversations — All messages, discussions, and shared content within this server are strictly confidential. Do not share, forward, or replicate any conversations outside this community." },
+    { id: 2, title: "No external surveillance - encrypted channels only", text: "Prohibition of Screenshots & Recordings — Screenshots, screen recordings, audio recordings, GIF captures, or any other form of content reproduction are strictly prohibited." },
+    { id: 3, title: "Respect the collective - we operate as one", text: "Privacy of Members — You may not disclose, reference, or share any member's username, display name, profile photo, banner, bio, or account connections outside the server." },
+    { id: 4, title: "Share knowledge - elevate the network", text: "Media Sharing Restrictions — Do not share any media (images, videos, audio files, documents, etc.) posted by others in this server without their explicit written permission." },
+    { id: 5, title: "What happens in CARTEL stays in CARTEL", text: "Screenshare & Voice Confidentiality — Any information shared via voice channels or screenshare must remain private. Recording or distributing content from these sessions is not allowed." },
   ];
 
   return (
@@ -238,7 +238,10 @@ export default function Home() {
                     <Badge variant="outline" className="font-mono text-xs border-destructive/50 text-destructive shrink-0">
                       {String(rule.id).padStart(2, '0')}
                     </Badge>
-                    <p className="text-muted-foreground font-mono text-sm pt-0.5">{rule.text}</p>
+                    <div className="pt-0.5">
+                      <p className="text-foreground font-mono text-sm font-bold mb-2">{rule.title}</p>
+                      <p className="text-muted-foreground font-mono text-sm">{rule.text}</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -292,7 +295,7 @@ export default function Home() {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8">
                 {[
-                  { label: "Members", value: "1,247+" },
+                  { label: "Members", value: "1,500+" },
                   { label: "Channels", value: "50+" },
                   { label: "Active", value: "24/7" },
                   { label: "Security", value: "MAX" },
