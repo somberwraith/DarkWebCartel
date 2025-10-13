@@ -20,10 +20,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Verify hCaptcha token
-      const hcaptchaSecret = process.env.HCAPTCHA_SECRET_KEY;
-      if (!hcaptchaSecret) {
-        return res.status(500).json({ error: "Server configuration error" });
-      }
+      // Use test key if no environment variable is set
+      const hcaptchaSecret = process.env.HCAPTCHA_SECRET_KEY || "0x0000000000000000000000000000000000000000";
 
       const verifyResponse = await fetch("https://hcaptcha.com/siteverify", {
         method: "POST",
