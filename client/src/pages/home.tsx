@@ -57,7 +57,7 @@ export default function Home() {
       {/* Hidden YouTube background music */}
       <iframe
         className="hidden"
-        src="https://www.youtube.com/embed/brlEIxdCIKE?autoplay=1&loop=1&playlist=brlEIxdCIKE&controls=0&showinfo=0&modestbranding=1"
+        src="https://www.youtube.com/embed/lb_YR5pSuCg?autoplay=1&loop=1&playlist=lb_YR5pSuCg&controls=0&showinfo=0&modestbranding=1"
         allow="autoplay"
         title="Background Music"
       />
