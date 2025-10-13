@@ -46,7 +46,7 @@ export default function Home() {
 
   const rules = [
     { id: 1, title: "Confidentiality of Conversations", text: "All messages, discussions, and shared content within this server are strictly confidential. Do not share, forward, or replicate any conversations outside this community." },
-    { id: 2, title: "Screenshots, screen recordings, audio recordings, GIF captures, or any other form of content reproduction are strictly prohibited.", text: "No external surveillance - encrypted channels only" },
+    { id: 2, title: "Prohibition of Screenshots & Recordings", text: "Screenshots, screen recordings, audio recordings, GIF captures, or any other form of content reproduction are strictly prohibited." },
     { id: 3, title: "Privacy of Members", text: "Respect the collective - we operate as one — You may not disclose, reference, or share any member's username, display name, profile photo, banner, bio, or account connections outside the server." },
     { id: 4, title: "Media Sharing Restrictions", text: "Share knowledge - elevate the network — Do not share any media (images, videos, audio files, documents, etc.) posted by others in this server without their explicit written permission." },
     { id: 5, title: "Screenshare & Voice Confidentiality", text: "What happens in CARTEL stays in CARTEL — Any information shared via voice channels or screenshare must remain private. Recording or distributing content from these sessions is not allowed." },
