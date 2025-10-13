@@ -331,7 +331,7 @@ export default function Home() {
               </Badge>
               <Badge variant="outline" className="font-mono text-xs border-primary/30" data-testid="badge-secure">
                 <Zap className="w-3 h-3 mr-1" />
-                SECURE
+                ACTIVE
               </Badge>
             </div>
           </div>
