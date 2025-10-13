@@ -198,13 +198,13 @@ export default function Home() {
                   &gt; ABOUT_THE_NETWORK
                 </h2>
                 <p className="text-muted-foreground leading-relaxed" data-testid="text-about">
-                  All hope abandon, ye who enter here.
+                  Abandon all hope, ye who enter here.
                 </p>
               </div>
               
               <div className="border-l-2 border-primary pl-4">
                 <p className="text-sm text-foreground font-mono">
-                  "All hope abandon, ye who enter here."
+                  "Abandon all hope, ye who enter here."
                 </p>
               </div>
             </div>
