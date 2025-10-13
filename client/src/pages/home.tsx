@@ -261,7 +261,7 @@ export default function Home() {
             <div className="p-8 md:p-12 text-center space-y-6">
               <div className="inline-flex items-center gap-3 bg-primary/10 border border-primary/30 rounded px-4 py-2">
                 <FontAwesomeIcon icon={faDiscord} className="w-6 h-6 text-primary" />
-                <span className="font-mono text-sm tracking-wider text-primary">ENCRYPTED CHANNEL</span>
+                <span className="font-mono text-sm tracking-wider text-primary">CARTEL COMMUNITY</span>
               </div>
               
               <h2 className="text-3xl md:text-4xl font-bold text-primary font-mono tracking-wide" data-testid="heading-join">
