@@ -25,17 +25,33 @@ export default function Appeal() {
       setCaptchaToken(token);
     };
 
-    // Get sitekey from environment or use empty string
-    const sitekey = import.meta.env.VITE_HCAPTCHA_SITEKEY || '';
+    // Get sitekey from environment - use a test key if not set
+    const sitekey = import.meta.env.VITE_HCAPTCHA_SITEKEY || '10000000-ffff-ffff-ffff-000000000001';
+
+    // Function to render hCaptcha
+    const renderCaptcha = () => {
+      if (captchaRef.current && (window as any).hcaptcha) {
+        try {
+          // Clear any existing widget
+          if (captchaRef.current.innerHTML) {
+            captchaRef.current.innerHTML = '';
+          }
+          
+          (window as any).hcaptcha.render(captchaRef.current, {
+            sitekey: sitekey,
+            callback: 'onCaptchaSuccess',
+          });
+          console.log('[hCaptcha] Widget rendered successfully');
+        } catch (error) {
+          console.error('[hCaptcha] Render error:', error);
+        }
+      }
+    };
 
     // Check if hCaptcha is already loaded
-    if ((window as any).hcaptcha && captchaRef.current && sitekey) {
-      // Render hCaptcha widget
-      (window as any).hcaptcha.render(captchaRef.current, {
-        sitekey: sitekey,
-        callback: 'onCaptchaSuccess',
-      });
-    } else if (sitekey) {
+    if ((window as any).hcaptcha) {
+      renderCaptcha();
+    } else {
       // Load hCaptcha script if not already loaded
       const script = document.createElement('script');
       script.src = 'https://js.hcaptcha.com/1/api.js?onload=onHcaptchaLoad&render=explicit';
@@ -44,12 +60,12 @@ export default function Appeal() {
 
       // Set up onload callback
       (window as any).onHcaptchaLoad = () => {
-        if (captchaRef.current && (window as any).hcaptcha) {
-          (window as any).hcaptcha.render(captchaRef.current, {
-            sitekey: sitekey,
-            callback: 'onCaptchaSuccess',
-          });
-        }
+        console.log('[hCaptcha] Script loaded');
+        renderCaptcha();
+      };
+
+      script.onerror = () => {
+        console.error('[hCaptcha] Failed to load script');
       };
 
       document.body.appendChild(script);
@@ -220,7 +236,10 @@ export default function Appeal() {
                     <Shield className="w-4 h-4 text-primary" />
                     VERIFICATION
                   </Label>
-                  <div ref={captchaRef}></div>
+                  <div 
+                    ref={captchaRef}
+                    className="min-h-[78px] flex items-center justify-center"
+                  ></div>
                 </div>
 
                 <Button
