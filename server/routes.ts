@@ -26,7 +26,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/health", (req, res) => {
     const uptime = process.uptime();
     const memoryUsage = process.memoryUsage();
-    
+
     res.json({
       status: "healthy",
       uptime: Math.floor(uptime),
@@ -51,12 +51,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Security admin endpoint - unblock an IP (use with caution)
   app.post("/api/security/unblock", (req, res) => {
     const { ip, adminKey } = req.body;
-    
+
     // Simple admin key check (use proper auth in production)
     if (adminKey !== process.env.SECURITY_ADMIN_KEY) {
       return res.status(403).json({ error: "Unauthorized" });
     }
-    
+
     const success = unblockIP(ip);
     if (success) {
       console.log(`[ADMIN] IP unblocked: ${ip}`);
@@ -74,7 +74,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     submittedAt: string;
   }) {
     const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    
+
     if (!webhookUrl) {
       console.log("No Discord webhook URL configured, skipping notification");
       return;
@@ -130,12 +130,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     failedRequestLimiter,    // Failed attempts: 10 per 5 minutes
     async (req, res) => {
       const clientIp = getClientIp(req);
-      
+
       try {
-        const { userId, denialDate, appealReason, captchaToken } = req.body;
+        const { userId, denialDate, appealReason } = req.body; // Removed captchaToken
 
         // Validate required fields
-        if (!userId || !denialDate || !appealReason || !captchaToken) {
+        if (!userId || !denialDate || !appealReason) {
           console.warn(`[SECURITY] Missing required fields from IP: ${clientIp}`);
           return res.status(400).json({ error: "All fields are required" });
         }
@@ -155,26 +155,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(400).json({ error: "Appeal reason must be less than 2000 characters" });
         }
 
-        // Verify hCaptcha token
-        const hcaptchaSecret = process.env.HCAPTCHA_SECRET_KEY;
-        
-        if (!hcaptchaSecret) {
-          console.error("[CONFIG ERROR] hCaptcha secret key not configured");
-          return res.status(500).json({ error: "Server configuration error: hCaptcha not configured" });
-        }
-
-        const verifyResponse = await fetch("https://hcaptcha.com/siteverify", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: `response=${captchaToken}&secret=${hcaptchaSecret}&remoteip=${clientIp}`,
-        });
-
-        const verifyData = await verifyResponse.json() as { success: boolean; 'error-codes'?: string[] };
-
-        if (!verifyData.success) {
-          console.warn(`[SECURITY] Captcha verification failed from IP: ${clientIp}. Errors: ${verifyData['error-codes']?.join(', ')}`);
-          return res.status(400).json({ error: "Captcha verification failed. Please try again." });
-        }
+        // CAPTCHA verification removed as per user request
 
         // Store the appeal
         const appeal = {

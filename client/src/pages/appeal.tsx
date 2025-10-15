@@ -14,68 +14,7 @@ export default function Appeal() {
     denialDate: "",
     appealReason: "",
   });
-  const [captchaToken, setCaptchaToken] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const captchaRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Set up global callback before loading script
-    (window as any).onCaptchaSuccess = (token: string) => {
-      setCaptchaToken(token);
-    };
-
-    // Hardcoded hCaptcha sitekey - Replace with your actual sitekey from https://dashboard.hcaptcha.com/
-    const sitekey = 'YOUR_ACTUAL_HCAPTCHA_SITEKEY_HERE';
-
-    // Function to render hCaptcha
-    const renderCaptcha = () => {
-      if (captchaRef.current && (window as any).hcaptcha) {
-        try {
-          // Clear any existing widget
-          if (captchaRef.current.innerHTML) {
-            captchaRef.current.innerHTML = '';
-          }
-
-          (window as any).hcaptcha.render(captchaRef.current, {
-            sitekey: sitekey,
-            callback: 'onCaptchaSuccess',
-          });
-          console.log('[hCaptcha] Widget rendered successfully');
-        } catch (error) {
-          console.error('[hCaptcha] Render error:', error);
-        }
-      }
-    };
-
-    // Check if hCaptcha is already loaded
-    if ((window as any).hcaptcha) {
-      renderCaptcha();
-    } else {
-      // Load hCaptcha script if not already loaded
-      const script = document.createElement('script');
-      script.src = 'https://js.hcaptcha.com/1/api.js?onload=onHcaptchaLoad&render=explicit';
-      script.async = true;
-      script.defer = true;
-
-      // Set up onload callback
-      (window as any).onHcaptchaLoad = () => {
-        console.log('[hCaptcha] Script loaded');
-        renderCaptcha();
-      };
-
-      script.onerror = () => {
-        console.error('[hCaptcha] Failed to load script');
-      };
-
-      document.body.appendChild(script);
-
-      return () => {
-        if (document.body.contains(script)) {
-          document.body.removeChild(script);
-        }
-      };
-    }
-  }, []);
 
   const validateDiscordId = (id: string): boolean => {
     // Discord IDs are 17-19 characters long and consist only of digits
@@ -94,25 +33,13 @@ export default function Appeal() {
       return;
     }
 
-    if (!captchaToken) {
-      toast({
-        title: "Verification Required",
-        description: "Please complete the CAPTCHA verification",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
       const response = await fetch("/api/appeals", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          captchaToken,
-        }),
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
@@ -125,11 +52,6 @@ export default function Appeal() {
           denialDate: "",
           appealReason: "",
         });
-        setCaptchaToken("");
-        // Reset hCaptcha
-        if (window.hcaptcha) {
-          window.hcaptcha.reset();
-        }
       } else {
         throw new Error("Submission failed");
       }
@@ -230,17 +152,6 @@ export default function Appeal() {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="font-mono text-sm flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-primary" />
-                    VERIFICATION
-                  </Label>
-                  <div 
-                    ref={captchaRef}
-                    className="min-h-[78px] flex items-center justify-center"
-                  ></div>
-                </div>
-
                 <Button
                   type="submit"
                   size="lg"
@@ -265,8 +176,3 @@ export default function Appeal() {
   );
 }
 
-declare global {
-  interface Window {
-    hcaptcha: any;
-  }
-}
