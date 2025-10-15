@@ -155,8 +155,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(400).json({ error: "Appeal reason must be less than 2000 characters" });
         }
 
-        // CAPTCHA verification removed as per user request
-
         // Store the appeal
         const appeal = {
           userId,
