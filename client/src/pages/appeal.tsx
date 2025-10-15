@@ -25,8 +25,8 @@ export default function Appeal() {
       setCaptchaToken(token);
     };
 
-    // Get sitekey from environment - use a test key if not set
-    const sitekey = import.meta.env.VITE_HCAPTCHA_SITEKEY || '10000000-ffff-ffff-ffff-000000000001';
+    // Hardcoded hCaptcha sitekey (REPLACE WITH YOUR ACTUAL SITEKEY)
+    const sitekey = 'YOUR_HCAPTCHA_SITEKEY_HERE';
 
     // Function to render hCaptcha
     const renderCaptcha = () => {
