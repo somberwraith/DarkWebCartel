@@ -190,8 +190,13 @@ export async function verifyCloudfareTurnstile(token: string, ip: string): Promi
   const secret = process.env.CLOUDFLARE_TURNSTILE_SECRET;
   
   if (!secret) {
-    console.warn('[SECURITY] Cloudflare Turnstile not configured, skipping verification');
-    return true;
+    console.error('[SECURITY] Cloudflare Turnstile secret not configured - BLOCKING REQUEST (fail closed)');
+    return false;
+  }
+  
+  if (!token) {
+    console.error('[SECURITY] Turnstile token missing from request');
+    return false;
   }
   
   try {
@@ -205,12 +210,36 @@ export async function verifyCloudfareTurnstile(token: string, ip: string): Promi
       }),
     });
     
-    const data = await response.json() as { success: boolean };
+    const data = await response.json() as { success: boolean; 'error-codes'?: string[] };
+    
+    if (!data.success) {
+      console.warn(`[SECURITY] Turnstile verification failed from IP: ${ip}. Errors: ${data['error-codes']?.join(', ')}`);
+    }
+    
     return data.success;
   } catch (error) {
     console.error('[SECURITY] Turnstile verification error:', error);
     return false;
   }
+}
+
+// Cloudflare Turnstile enforcement middleware
+export async function enforceTurnstile(req: Request, res: Response, next: NextFunction): Promise<void> {
+  const token = req.body?.turnstileToken || req.body?.cfTurnstile || req.headers['cf-turnstile-response'];
+  const ip = req.clientIp || getClientIp(req);
+  
+  const isValid = await verifyCloudfareTurnstile(token as string, ip);
+  
+  if (!isValid) {
+    console.error(`[SECURITY] Turnstile verification failed for IP: ${ip}`);
+    res.status(403).json({ 
+      error: "Bot verification failed. Please complete the challenge and try again.",
+      code: "TURNSTILE_FAILED"
+    });
+    return;
+  }
+  
+  next();
 }
 
 // Request timeout protection
