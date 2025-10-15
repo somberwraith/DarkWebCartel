@@ -157,15 +157,51 @@ export function fingerprintAnomalyDetection(req: Request, res: Response, next: N
 // Honeypot endpoint - any access to this is 100% malicious
 export function setupHoneypot(app: any) {
   const honeypotPaths = [
+    // WordPress/CMS attacks
     '/wp-admin',
     '/wp-login.php',
+    '/wp-config.php',
+    '/xmlrpc.php',
     '/admin',
+    '/administrator',
+    '/admin.php',
+    
+    // Database/Config files
     '/phpmyadmin',
     '/.env',
+    '/.env.production',
     '/.git/config',
     '/config.php',
-    '/admin.php',
-    '/administrator',
+    '/configuration.php',
+    
+    // API Documentation/Discovery (COMMON ATTACK VECTOR!)
+    '/api/swagger',
+    '/swagger',
+    '/swagger.json',
+    '/swagger.yaml',
+    '/swagger/v1/swagger.json',
+    '/swagger/v2/swagger.json',
+    '/api-docs',
+    '/api/docs',
+    '/docs',
+    '/graphql',
+    '/api/graphql',
+    '/v1/api-docs',
+    '/v2/api-docs',
+    '/openapi.json',
+    '/api.json',
+    
+    // Common scanning paths
+    '/backup',
+    '/backup.sql',
+    '/backup.zip',
+    '/database.sql',
+    '/.git',
+    '/.svn',
+    '/.htaccess',
+    '/web.config',
+    '/server-status',
+    '/server-info',
   ];
   
   honeypotPaths.forEach(path => {

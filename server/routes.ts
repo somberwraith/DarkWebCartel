@@ -22,11 +22,49 @@ interface DiscordEmbed {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // put application routes here
-  // prefix all routes with /api
+  // Health check endpoint (for monitoring and auto-restart)
+  app.get("/health", (req, res) => {
+    const uptime = process.uptime();
+    const memoryUsage = process.memoryUsage();
+    
+    res.json({
+      status: "healthy",
+      uptime: Math.floor(uptime),
+      memory: {
+        used: Math.round(memoryUsage.heapUsed / 1024 / 1024) + "MB",
+        total: Math.round(memoryUsage.heapTotal / 1024 / 1024) + "MB"
+      },
+      timestamp: new Date().toISOString()
+    });
+  });
 
-  // use storage to perform CRUD operations on the storage interface
-  // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
+  // Security monitoring endpoint - view blocked IPs
+  app.get("/api/security/blocked-ips", (req, res) => {
+    const blockedIPs = getBlockedIPs();
+    res.json({
+      total: blockedIPs.length,
+      ips: blockedIPs,
+      timestamp: new Date().toISOString()
+    });
+  });
+
+  // Security admin endpoint - unblock an IP (use with caution)
+  app.post("/api/security/unblock", (req, res) => {
+    const { ip, adminKey } = req.body;
+    
+    // Simple admin key check (use proper auth in production)
+    if (adminKey !== process.env.SECURITY_ADMIN_KEY) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+    
+    const success = unblockIP(ip);
+    if (success) {
+      console.log(`[ADMIN] IP unblocked: ${ip}`);
+      res.json({ success: true, message: `IP ${ip} unblocked` });
+    } else {
+      res.json({ success: false, message: `IP ${ip} was not blocked` });
+    }
+  });
 
   // Function to send Discord webhook
   async function sendDiscordWebhook(appeal: {
@@ -84,34 +122,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Failed to send Discord webhook:", error);
     }
   }
-
-  // Security monitoring endpoint - view blocked IPs
-  app.get("/api/security/blocked-ips", (req, res) => {
-    const blockedIPs = getBlockedIPs();
-    res.json({
-      total: blockedIPs.length,
-      ips: blockedIPs,
-      timestamp: new Date().toISOString()
-    });
-  });
-
-  // Security admin endpoint - unblock an IP (use with caution)
-  app.post("/api/security/unblock", (req, res) => {
-    const { ip, adminKey } = req.body;
-    
-    // Simple admin key check (use proper auth in production)
-    if (adminKey !== process.env.SECURITY_ADMIN_KEY) {
-      return res.status(403).json({ error: "Unauthorized" });
-    }
-    
-    const success = unblockIP(ip);
-    if (success) {
-      console.log(`[ADMIN] IP unblocked: ${ip}`);
-      res.json({ success: true, message: `IP ${ip} unblocked` });
-    } else {
-      res.json({ success: false, message: `IP ${ip} was not blocked` });
-    }
-  });
 
   // Appeal submission endpoint with AGGRESSIVE rate limiting
   app.post("/api/appeals", 
