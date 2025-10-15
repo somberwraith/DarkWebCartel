@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Shield, Clock, User, Calendar, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,8 +24,8 @@ export default function Appeal() {
       setCaptchaToken(token);
     };
 
-    // Hardcoded hCaptcha sitekey (REPLACE WITH YOUR ACTUAL SITEKEY)
-    const sitekey = 'YOUR_HCAPTCHA_SITEKEY_HERE';
+    // Hardcoded hCaptcha sitekey - Replace with your actual sitekey from https://dashboard.hcaptcha.com/
+    const sitekey = 'YOUR_ACTUAL_HCAPTCHA_SITEKEY_HERE';
 
     // Function to render hCaptcha
     const renderCaptcha = () => {
@@ -36,7 +35,7 @@ export default function Appeal() {
           if (captchaRef.current.innerHTML) {
             captchaRef.current.innerHTML = '';
           }
-          
+
           (window as any).hcaptcha.render(captchaRef.current, {
             sitekey: sitekey,
             callback: 'onCaptchaSuccess',
@@ -85,7 +84,7 @@ export default function Appeal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateDiscordId(formData.userId)) {
       toast({
         title: "Invalid Discord ID",
